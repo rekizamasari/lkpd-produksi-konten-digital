@@ -6,8 +6,8 @@
  *   3. Tempel keduanya di dua baris di bawah, lalu jalankan sql/schema.sql
  * JANGAN PERNAH mengisi key service_role di file ini — hanya anon key!
  * ===================================================================== */
-const SUPABASE_URL = ""; // ← tempel Project URL di sini
-const SUPABASE_ANON_KEY = ""; // ← tempel anon public key di sini
+const SUPABASE_URL = "https://nuyctknyatbivyunalij.supabase.co"; // ← tempel Project URL di sini
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51eWN0a255YXRiaXZ5dW5hbGlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1NTc4ODQsImV4cCI6MjExMDEzMzg4NH0.uSC2V1_QiEyxEeh398nKRWOi-ZEKSbUcP7CfikGLM7k"; // ← tempel anon public key di sini
 
 // ---------------------------------------------------------------------------
 // Profil guru default yang dibuat via SQL (lihat README bagian 6).
