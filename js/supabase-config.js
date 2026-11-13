@@ -27,6 +27,20 @@ const CONFIG = {
 let db = null;
 function initSupabase() {
   if (db) return db;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    const pesan = "Supabase belum dikonfigurasi: isi SUPABASE_URL dan SUPABASE_ANON_KEY di js/supabase-config.js, lalu jalankan sql/schema.sql di SQL Editor proyek tersebut.";
+    console.error("❌ " + pesan);
+    if (typeof document !== "undefined") {
+      document.addEventListener("DOMContentLoaded", () => {
+        const box = document.createElement("div");
+        box.className = "info-box merah";
+        box.style.cssText = "position:fixed;inset:auto 12px 12px 12px;z-index:9999";
+        box.textContent = "⚠️ " + pesan;
+        document.body && document.body.appendChild(box);
+      });
+    }
+    throw new Error("Konfigurasi Supabase kosong");
+  }
   db = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
