@@ -27,6 +27,7 @@ Repo ini memakai **proyek Supabase sendiri** (terpisah dari LKPD lain). Skema DB
 1. **Buat proyek Supabase** baru di https://supabase.com (gratis). Salin **Project URL** dan **anon public key** dari *Settings → API*, lalu isi ke `js/supabase-config.js` (dua konstanta kosong di bagian atas).
 2. **Nonaktifkan konfirmasi email**: *Authentication → Sign In / Providers → Email* → matikan **"Confirm email"**. (Tanpa ini siswa tidak bisa login setelah daftar.)
 3. **Jalankan skema**: *SQL Editor → paste seluruh isi `sql/schema.sql` → Run*. Skrip ini idempotent (aman diulang).
+   Skema juga memuat fitur **Kelola** di dashboard guru: ganti sandi guru, reset sandi siswa (RPC `guru_reset_password_siswa`), dan reset tugas siswa (policy delete untuk guru). Jalankan ulang skrip ini jika proyek dibuat sebelum fitur tersebut ada.
 4. **Kelola kelas**: edit bagian `SEED` di `sql/schema.sql` sebelum dijalankan (nama kelas X kamu), atau tambah/ubah lewat *Table Editor → kelas* kapan saja (tombol ➕ Tambah Kelas di dashboard guru juga bisa).
 5. **Akun guru** — daftarkan lewat Supabase Dashboard (*Authentication → Users → Add user*, Auto Confirm) dengan email + password guru, lalu di SQL Editor:
    ```sql
@@ -52,7 +53,7 @@ js/supabase-config.js   URL & anon key (WAJIB diisi — proyek mandiri)
 js/auth.js        login/session + mapper NISN→email
 js/data.js        5 modul p1–p5 + KUIS_AKHIR (p-final)
 js/siswa.js       praktik isian + kanvas (alur/timeline/poster) + gerbang + kuis berwaktu
-js/guru.js        analitik, CSV, realtime, materi & kunci
+js/guru.js        analitik, CSV, realtime, materi & kunci, kelola akun & reset sandi/tugas
 sql/schema.sql    skema Supabase (jalankan 1× di SQL Editor proyek)
 .opencode/skills/ skill OpenCode "buat-lkpd" (panduan & validasi)
 PROMPT-TEMPLATE-LKPD-NONKODING.md   master prompt untuk LKPD non-koding baru

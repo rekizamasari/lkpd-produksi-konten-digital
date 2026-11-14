@@ -25,6 +25,7 @@
       <button class="tab-btn" data-tab="nilai">🗂️ Nilai Siswa</button>
       <button class="tab-btn" data-tab="rincian">💬 Rincian Jawaban</button>
       <button class="tab-btn" data-tab="materi">📖 Materi &amp; Kunci</button>
+      <button class="tab-btn" data-tab="kelola">⚙️ Kelola Akun &amp; Reset</button>
     </div>
 
     <!-- ======== TAB: ANALITIK ======== -->
@@ -83,6 +84,39 @@
         <select id="materi-pilih" style="max-width:420px"></select>
       </div>
       <div id="materi-content"></div>
+    </section>
+
+    <!-- ======== TAB: KELOLA ======== -->
+    <section class="tab-page" id="tab-kelola">
+      <div class="lec-panel">
+        <h4>🔑 Ganti Kata Sandi Saya</h4>
+        <div class="input-row">
+          <div><label>Kata sandi baru (min. 6 karakter)</label><input type="password" id="sandi-baru-1" autocomplete="new-password" /></div>
+          <div><label>Ulangi kata sandi baru</label><input type="password" id="sandi-baru-2" autocomplete="new-password" /></div>
+        </div>
+        <button class="btn btn-hijau" id="btn-sandi-saya" style="margin-top:14px">🔑 Simpan Kata Sandi</button>
+      </div>
+
+      <div class="lec-panel">
+        <h4>🧑‍🎓 Reset Kata Sandi Siswa</h4>
+        <p class="muted">Untuk siswa yang lupa kata sandi: pilih siswa, tentukan sandi barunya, lalu beritahu siswa itu.</p>
+        <div class="input-row">
+          <div><label>Siswa</label><select id="reset-siswa-1"><option value="">— pilih siswa —</option></select></div>
+          <div><label>Kata sandi baru (min. 6 karakter)</label><input type="text" id="sandi-siswa-baru" autocomplete="off" /></div>
+        </div>
+        <button class="btn btn-kuning" id="btn-reset-sandi-siswa" style="margin-top:14px">🧑‍🎓 Reset Sandi Siswa</button>
+      </div>
+
+      <div class="lec-panel">
+        <h4>♻️ Reset Tugas Siswa</h4>
+        <p class="muted">Menghapus progres langkah, nilai praktik, dan nilai kuis siswa agar bisa mengerjakan ulang.
+          Tindakan ini <b style="color:var(--merah)">tidak bisa dibatalkan</b>.</p>
+        <div class="input-row">
+          <div><label>Siswa</label><select id="reset-siswa-2"><option value="">— pilih siswa —</option></select></div>
+          <div><label>Cakupan</label><select id="reset-modul"></select></div>
+        </div>
+        <button class="btn btn-merah" id="btn-reset-tugas" style="margin-top:14px">♻️ Reset Tugas Siswa</button>
+      </div>
     </section>
   </main>
 

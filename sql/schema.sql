@@ -168,3 +168,61 @@ on conflict (nama) do nothing;
 --   alter publication supabase_realtime add table public.submissions;
 --   alter publication supabase_realtime add table public.quiz_results;
 -- =====================================================================
+
+-- =====================================================================
+-- 7. FITUR KELOLA GURU: reset password siswa & reset tugas siswa
+-- (idempotent: jalankan ulang seluruh file ini aman kapan saja)
+-- =====================================================================
+
+-- pgcrypto: dipakai untuk meng-hash password baru (bcrypt)
+create extension if not exists pgcrypto;
+
+-- RESET PASSWORD SISWA via RPC (hanya guru, hanya untuk akun siswa).
+-- Password disimpan bcrypt di auth.users — cara yang sama dipakai GoTrue.
+create or replace function public.guru_reset_password_siswa(p_siswa uuid, p_sandi text)
+returns text
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+begin
+  if not exists (select 1 from public.profiles where id = auth.uid() and role = 'guru') then
+    raise exception 'Hanya guru yang boleh reset password siswa';
+  end if;
+  if length(trim(p_sandi)) < 6 then
+    raise exception 'Kata sandi minimal 6 karakter';
+  end if;
+  if not exists (
+    select 1 from auth.users u
+      join public.profiles p on p.id = u.id
+     where u.id = p_siswa and p.role = 'siswa'
+  ) then
+    raise exception 'Siswa tidak ditemukan (atau akun bukan siswa)';
+  end if;
+  update auth.users
+     set encrypted_password = crypt(p_sandi, gen_salt('bf', 10)),
+         updated_at = now()
+   where id = p_siswa;
+  return 'OK';
+end;
+$$;
+
+revoke execute on function public.guru_reset_password_siswa(uuid, text) from anon;
+grant  execute on function public.guru_reset_password_siswa(uuid, text) to authenticated;
+
+-- RESET TUGAS: guru boleh menghapus data milik siswa
+-- (progres langkah, praktik, dan hasil kuis) supaya bisa diulang.
+drop policy if exists "progress_del_guru" on public.progress;
+create policy "progress_del_guru" on public.progress for delete using (
+  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'guru')
+);
+
+drop policy if exists "sub_del_guru" on public.submissions;
+create policy "sub_del_guru" on public.submissions for delete using (
+  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'guru')
+);
+
+drop policy if exists "quiz_del_guru" on public.quiz_results;
+create policy "quiz_del_guru" on public.quiz_results for delete using (
+  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'guru')
+);

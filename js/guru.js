@@ -50,6 +50,58 @@ $g("btn-refresh").onclick = async () => {
 $g("filter-kelas").onchange = () => tampilkan(semuaData);
 $g("btn-csv").onclick = unduhCSV;
 
+/* ---------- TAB KELOLA: sandi & reset ---------- */
+$g("reset-modul").innerHTML =
+  `<option value="*">♻️ Semua modul (ulang dari awal)</option>` +
+  MODUL.map(m => `<option value="${m.id}">M${m.nomor} — ${m.judul}</option>`).join("") +
+  `<option value="${FINAL_ID}">🏁 Kuis Akhir saja</option>`;
+
+$g("btn-sandi-saya").onclick = async () => {
+  const a = $g("sandi-baru-1").value.trim(), b = $g("sandi-baru-2").value.trim();
+  if (a.length < 6) return alert("Kata sandi minimal 6 karakter.");
+  if (a !== b) return alert("Kedua isian kata sandi tidak sama.");
+  const btn = $g("btn-sandi-saya"); btn.disabled = true;
+  const { error } = await sb.auth.updateUser({ password: a });
+  btn.disabled = false;
+  if (error) return alert("Gagal ganti sandi: " + error.message);
+  $g("sandi-baru-1").value = $g("sandi-baru-2").value = "";
+  alert("✅ Kata sandi berhasil diganti.");
+};
+
+$g("btn-reset-sandi-siswa").onclick = async () => {
+  const id = $g("reset-siswa-1").value, sandi = $g("sandi-siswa-baru").value.trim();
+  if (!id) return alert("Pilih siswa terlebih dahulu.");
+  if (sandi.length < 6) return alert("Kata sandi baru minimal 6 karakter.");
+  if (!confirm(`Ganti kata sandi ${namaSiswa(id)} menjadi "${sandi}"?`)) return;
+  const btn = $g("btn-reset-sandi-siswa"); btn.disabled = true;
+  const { error } = await sb.rpc("guru_reset_password_siswa", { p_siswa: id, p_sandi: sandi });
+  btn.disabled = false;
+  if (error) return alert("Gagal reset sandi: " + error.message);
+  $g("sandi-siswa-baru").value = "";
+  alert(`✅ Kata sandi ${namaSiswa(id)} sudah diganti. Beritahu sandi barunya ke siswa.`);
+};
+
+$g("btn-reset-tugas").onclick = async () => {
+  const id = $g("reset-siswa-2").value, mid = $g("reset-modul").value;
+  if (!id) return alert("Pilih siswa terlebih dahulu.");
+  const cakupan = mid === "*" ? "SEMUA MODUL"
+    : mid === FINAL_ID ? "Kuis Akhir"
+    : "Modul " + (MODUL.find(m => m.id === mid)?.nomor ?? mid);
+  if (!confirm(`⚠️ Reset tugas ${namaSiswa(id)} untuk ${cakupan}?\nSemua progres, nilai praktik, dan nilai kuis pada cakupan itu akan DIHAPUS dan tidak bisa dikembalikan.`)) return;
+  const btn = $g("btn-reset-tugas"); btn.disabled = true; btn.textContent = "⏳ Menghapus…";
+  const gagal = [];
+  for (const t of ["progress", "submissions", "quiz_results"]) {
+    let q = sb.from(t).delete().eq("student_id", id);
+    if (mid !== "*") q = q.eq("module_id", mid);
+    const { error } = await q;
+    if (error) gagal.push(`${t}: ${error.message}`);
+  }
+  btn.disabled = false; btn.textContent = "♻️ Reset Tugas Siswa";
+  if (gagal.length) return alert("Sebagian data gagal dihapus:\n" + gagal.join("\n"));
+  alert(`✅ Tugas ${namaSiswa(id)} (${cakupan}) sudah direset.`);
+  await refreshSemua();
+};
+
 /* ---------- TAB MATERI & KUNCI ---------- */
 $g("materi-pilih").innerHTML =
   MODUL.map(m => `<option value="${m.id}">Modul ${m.nomor} — ${m.judul}</option>`).join("") +
@@ -169,7 +221,25 @@ async function refreshSemua() {
   });
 
   semuaData = { listSiswa, listSubs, listKuis, best };
+  isiDropdownSiswaKelola();
   tampilkan(semuaData);
+}
+
+/* Dropdown siswa di tab Kelola — diisi ulang tiap refresh, pilihan dipertahankan */
+function isiDropdownSiswaKelola() {
+  const opts = (semuaData?.listSiswa || []).map(s =>
+    `<option value="${s.id}">${escapeHTML(bersihNama(s.nama))}${s.kelas?.nama ? " — " + escapeHTML(s.kelas.nama) : ""}</option>`).join("");
+  ["reset-siswa-1", "reset-siswa-2"].forEach(id => {
+    const el = $g(id), val = el.value;
+    el.innerHTML = `<option value="">— pilih siswa —</option>` + opts;
+    if (val) el.value = val; // pertahankan pilihan sebelumnya bila masih ada
+  });
+}
+
+/* Nama siswa utk dialog konfirmasi */
+function namaSiswa(id) {
+  const s = (semuaData?.listSiswa || []).find(x => x.id === id);
+  return s ? bersihNama(s.nama) : "siswa";
 }
 
 /* ---------- TAMPILKAN ---------- */
