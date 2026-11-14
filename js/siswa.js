@@ -1,7 +1,7 @@
 /* =====================================================================
  * siswa.js — Logika dashboard siswa (LKPD Produksi & Diseminasi Konten
  * Digital, KKA Kelas X):
- *  • Menampilkan 5 modul + progress pribadi
+ *  • Menampilkan 6 modul + progress pribadi
  *  • Praktik = isian terstruktur (angka/teks/dropdown) + kanvas interaktif
  *    (alur produksi / timeline storyboard / mock poster) — TANPA kode program
  *  • Auto-check praktik numerik/teks → nilai otomatis (0–100) → simpan ke Supabase

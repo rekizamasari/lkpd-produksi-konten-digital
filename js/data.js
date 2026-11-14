@@ -1,8 +1,9 @@
 /* =====================================================================
  * data.js — LKPD Produksi & Diseminasi Konten Digital
  * (Koding dan Kecerdasan Artifisial / KKA, Kelas X)
- * 5 modul: Konsep Produksi, Perencanaan & Storyboard, Konten Edukatif
- * dengan Fitur AI, Karya Kreatif & Inspiratif, Etika & Diseminasi.
+ * 6 modul: Konsep Produksi, Perencanaan & Storyboard, Konten Edukatif
+ * dengan Fitur AI, Karya Kreatif & Inspiratif, Etika & Diseminasi,
+ * Editing Video Edukatif dengan CapCut.
  * Praktik = aktivitas interaktif non-koding (isian angka/teks + dropdown
  * + kanvas: alur produksi, timeline storyboard, mock poster) — auto-check
  * numerik & regex, TANPA editor kode program.
@@ -36,7 +37,7 @@ Perencanaan  : naskah, storyboard, alat (pra-produksi)
 Produksi     : merekam/mengambil gambar
 Pasca Produksi: sunting (editing), tambah teks/musik
 Diseminasi   : unggah ke platform + promosi</pre>
-<div class="info-box hijau">💡 <b>Kunci tahap:</b> menulis naskah & storyboard terjadi di <b>Perencanaan</b> (pra-produksi); menyunting hasil rekaman terjadi di <b>Pasca Produksi</b> — jangan tertukar!</div>
+<div class="info-box hijau">💡 <b>Kunci tahap:</b> menulis naskah & storyboard terjadi di <b>Perencanaan</b> (pra-produksi); menyunting hasil rekaman terjadi di <b>Pasca Produksi</b> — jangan tertukar! Untuk video, penyuntingan di pasca produksi dilakukan dengan <b>aplikasi editor seperti CapCut</b> (dipelajari mendalam di Modul 6).</div>
 <h4>Jenis konten digital</h4>
 <pre>Video pendek  → tutorial, tips (TikTok/Reels/Shorts)
 Infografis    → data/fakta yang mudah dipindai mata
@@ -310,6 +311,7 @@ Lanjutkan: tulis <b>kalimat peran</b> prompt-mu (harus memuat kata "guru"/"penga
     { q: "Video 180 detik dengan 1 gambar AI tiap 45 detik membutuhkan…", opsi: ["3 gambar", "5 gambar", "4 gambar", "6 gambar"], kunci: 2 },
     { q: "Sikap yang benar terhadap keluaran AI adalah…", opsi: ["diperiksa &amp; diverifikasi kebenarannya dulu", "langsung dipakai tanpa dibaca", "diunggah segera supaya cepat viral", "diperbanyak tanpa cek"], kunci: 0 },
     { q: "Guru ingin video penjelasan fotosintesis: naskah + narasi suara + ilustrasi. Kombinasi fitur AI paling tepat adalah…", opsi: ["generator teks + TTS + teks→gambar", "kalkulator + printer", "scanner + fotokopi", "GPS + kompas"], kunci: 0 },
+    { q: "Salah satu manfaat penggunaan <b>Artificial Intelligence (AI)</b> dalam pembuatan video edukatif adalah…", opsi: ["menghilangkan kebutuhan ide kreatif manusia", "membantu membuat teks, suara, gambar, dan konten video secara otomatis", "menghapus seluruh proses penyuntingan video", "menggantikan seluruh fungsi kamera", "membuat video tanpa memerlukan informasi atau materi"], kunci: 1 },
   ],
 },
 
@@ -502,17 +504,117 @@ Lanjutkan: tulis <b>caption</b> yang memuat minimal <b>1 hashtag</b>, jawab tent
   ],
 },
 
+/* ================= P6: EDITING VIDEO EDUKATIF DENGAN CAPCUT ================= */
+{
+  id: "p6",
+  nomor: 6,
+  judul: "Editing Video Edukatif dengan CapCut",
+  ikon: "✂️",
+  ringkas: "CapCut & timeline, Auto Captions, TTS, prompt gambar AI, ekspor MP4, verifikasi & evaluasi.",
+  tujuan: [
+    "Menjelaskan fungsi aplikasi CapCut sebagai perangkat lunak untuk membuat dan menyunting video.",
+    "Mengatur urutan, durasi, dan posisi klip video serta audio menggunakan timeline.",
+    "Memanfaatkan fitur Auto Captions, Text to Speech (TTS), dan prompt untuk gambar AI.",
+    "Mengekspor video ke format MP4 serta memverifikasi kebenaran konten AI sebelum dan sesudah unggah.",
+  ],
+  teori: `
+<p><b>CapCut</b> adalah aplikasi <b>membuat dan menyunting video</b> (video editor) yang populer untuk konten pendek — tersedia di HP dan komputer. Di tahap <b>pasca produksi</b>, seluruh hasil rekaman dan aset AI dirakit menjadi video utuh di sini.</p>
+<h4>Timeline — meja kerja editor</h4>
+<p><b>Timeline</b> adalah panel berjalur waktu di CapCut yang dipakai untuk <b>mengatur urutan, durasi, dan posisi</b> setiap klip video serta audio. Geser klip = pindah urutan; tarik ujung klip = potong/pajanjang durasi; tumpuk di jalur berbeda = musik & teks berjalan bersama video.</p>
+<pre>jalur atas   : teks / caption / efek
+jalur tengah : klip video utama
+jalur bawah  : musik &amp; narasi</pre>
+<h4>Fitur penting CapCut + AI</h4>
+<pre>Auto Captions     : membuat teks secara OTOMATIS
+                    dari suara dalam video
+Text to Speech    : mengubah teks (naskah) menjadi
+                    suara narasi
+Prompt AI         : perintah berupa deskripsi yang
+                    diketik untuk membuat gambar/video AI
+Background Removal: menghapus latar belakang
+Video Stabilization: menenangkan rekaman goyang</pre>
+<div class="info-box hijau">💡 Ingat arah transformasinya: <b>TTS = teks → suara</b> (narasi), <b>Auto Captions = suara → teks</b> (takarir otomatis). Dua-duanya dikerjakan CapCut, tapi arahnya berlawanan!</div>
+<h4>Alur editing di CapCut</h4>
+<pre>Impor Aset → Susun Timeline → Teks &amp; Caption
+→ Cek &amp; Verifikasi → Ekspor MP4</pre>
+<h4>Langkah awal SEBELUM menyunting</h4>
+<p>Sebelum menyentuh CapCut, tentukan dulu <b>tujuan, materi, dan alur cerita</b> video (pra-produksi). Editing tanpa alur = efek banyak tapi pesan kacau.</p>
+<h4>Ekspor &amp; format</h4>
+<p>Setelah editing selesai, video diekspor. Format paling umum agar bisa ditonton di berbagai perangkat adalah <b>.MP4</b> (kompres, ringan, diterima semua platform). Dokumen .DOCX/.XLSX/.TXT bukan format video.</p>
+<div class="info-box kuning">🔍 <b>Verifikasi wajib:</b> gambar/informasi dari AI bisa keliru secara ilmiah. Periksa lewat sumber tepercaya, perbaiki konten, dan sesuaikan visual sebelum video diunggah.</div>
+<div class="info-box kuning">📈 <b>Evaluasi setelah unggah:</b> masukan penonton (suara terlalu cepat, teks sulit dibaca, informasi kurang jelas) = data evaluasi. Perbaiki kualitas audio, keterbacaan teks, sederhanakan informasi, lalu uji ulang — jangan diabaikan.</div>`,
+  langkah: [
+    { judul: "Kumpulkan & impor aset ke CapCut", penjelasan: "Semua bahan dikumpulkan dulu, lalu diimpor ke proyek.", kode:
+"Aset   : rekaman, gambar AI, musik\nImpor  : Media → Import → pilih file\nProyek : rasio 9:16 (konten pendek)" },
+    { judul: "Susun klip di timeline", penjelasan: "Urutan, durasi, dan posisi klip diatur di timeline.", kode:
+"Urutan : hook → inti → penutup\nPotong : pisau (split) bagian tak terpakai\nCek    : jeda jangan terlalu panjang" },
+    { judul: "Tambah teks, Auto Captions & narasi TTS", penjelasan: "Caption otomatis dibuat dari suara; narasi dari teks.", kode:
+"Auto Captions : Text → Auto Captions\nTTS           : teks naskah → suara narasi\nPenyesuaian   : font besar &amp; kontras," },
+    { judul: "Cek & verifikasi", penjelasan: "Periksa fakta, keterbacaan, dan kualitas suara.", kode:
+"Gambar AI : cek fakta ke sumber tepercaya\nTeks      : terbaca di layar HP?\nSuara     : kecepatan pas, tidak terlalu cepat" },
+    { judul: "Ekspor MP4", penjelasan: "Video final disimpan dalam format yang diterima semua perangkat.", kode:
+"Ekspor  : Export → resolusi 1080p\nFormat  : .MP4 (kompatibel di mana saja)\nSiap    : diunggah ke platform" },
+  ],
+  praktik: {
+    deskripsi: `<b>Misi praktik:</b> kamu mengedit video edukatif <b>"Bahaya Perundungan (Bullying)"</b> di CapCut. Naskahmu <b>240 kata</b> dan akan dibacakan dengan kecepatan <b>120 kata/menit</b>.
+<div class="info-box hijau">💡 Hitung <b>durasi video (detik)</b>: kata ÷ kecepatan × 60. Kanvas menampilkan <b>alur editing CapCut</b> — tahap yang kamu pilih akan tersorot.</div>
+Lanjutkan: pilih <b>aplikasi</b>, <b>fitur</b>, dan <b>format ekspor</b> yang tepat, lalu pilih tahap editing tempat kamu <b>memeriksa fakta</b> gambar AI. 📤 <b>Kirim</b> saat semua terisi.`,
+    inputs: `
+  <div class="input-row">
+    <label>Durasi video = <input id="p6-durasi" type="number" step="any" style="width:80px" /> detik</label>
+    <label>Aplikasi untuk membuat &amp; menyunting video:
+      <select id="p6-app"><option value="">— pilih —</option><option>CapCut</option><option>Microsoft Excel</option><option>MySQL</option><option>Windows Installer</option></select></label>
+  </div>
+  <div class="input-row">
+    <label>Fitur pembuat teks otomatis dari suara dalam video:
+      <select id="p6-caption"><option value="">— pilih —</option><option>Auto Captions</option><option>Background Removal</option><option>Video Stabilization</option><option>Image to Video</option></select></label>
+    <label>Fitur narasi suara dari teks materi:
+      <select id="p6-tts"><option value="">— pilih —</option><option>Text to Speech</option><option>Speech to Text</option><option>Image to Video</option><option>Video Stabilization</option></select></label>
+  </div>
+  <div class="input-row">
+    <label>Format file video hasil ekspor:
+      <select id="p6-format"><option value="">— pilih —</option><option>.MP4</option><option>.DOCX</option><option>.XLSX</option><option>.TXT</option></select></label>
+    <label>Tahap editing tempat memeriksa kebenaran fakta gambar AI:
+      <select id="p6-tahap"><option value="">— pilih —</option><option>Impor Aset</option><option>Susun Timeline</option><option>Teks &amp; Caption</option><option>Cek &amp; Verifikasi</option><option>Ekspor MP4</option></select></label>
+  </div>`,
+    visual: {
+      jenis: "alur",
+      tinggiKanvas: 280,
+      judulKanvas: "🗺️ Kanvas Alur Editing CapCut — tahap yang kamu pilih akan tersorot",
+      tahap: ["Impor Aset", "Susun Timeline", "Teks & Caption", "Cek & Verifikasi", "Ekspor MP4"],
+      sorotSel: "#p6-tahap",
+    },
+    checks: [
+      { poin: 20, desc: "Durasi video: 240 ÷ 120 × 60 = 120 detik",           type: "angka", sel: "#p6-durasi",  val: 120 },
+      { poin: 15, desc: "Aplikasi editor video: CapCut",                       type: "teks",  sel: "#p6-app",     val: "capcut" },
+      { poin: 15, desc: "Teks otomatis dari suara: Auto Captions",             type: "teks",  sel: "#p6-caption", val: "auto\\s*captions" },
+      { poin: 15, desc: "Narasi suara dari teks: Text to Speech",              type: "teks",  sel: "#p6-tts",     val: "text\\s*to\\s*speech" },
+      { poin: 15, desc: "Format ekspor yang umum: .MP4",                       type: "teks",  sel: "#p6-format",  val: "mp4" },
+      { poin: 20, desc: "Tahap verifikasi fakta AI: Cek & Verifikasi",         type: "teks",  sel: "#p6-tahap",   val: "verifikasi" },
+    ],
+  },
+  kuis: [
+    { q: "Aplikasi CapCut adalah perangkat lunak yang digunakan untuk…", opsi: ["membuat dan menyunting video", "memproses angka dan tabel", "membuat sistem operasi komputer", "mengelola basis data", "membuat jaringan internet"], kunci: 0 },
+    { q: "Dalam editing di CapCut, fitur <b>Auto Captions</b> berfungsi untuk…", opsi: ["mengubah video menjadi gambar", "membuat teks secara otomatis dari suara dalam video", "menghapus seluruh suara dalam video", "menambahkan efek gerakan kamera", "mengubah ukuran layar"], kunci: 1 },
+    { q: "Dalam pembuatan video edukatif, penggunaan <b>timeline</b> pada CapCut bertujuan untuk…", opsi: ["menentukan harga video", "mengatur urutan, durasi, dan posisi klip video serta audio", "menghapus aplikasi yang tidak dipakai", "menghubungkan komputer ke internet", "mengubah video jadi dokumen teks"], kunci: 1 },
+    { q: "Siswa memakai AI untuk menghasilkan narasi suara dari teks materi. Teknologi itu disebut…", opsi: ["Text to Speech", "Speech to Text", "Image to Video", "Video Stabilization", "Background Removal"], kunci: 0 },
+    { q: "Setelah editing selesai, format file video yang umum agar dapat ditonton melalui berbagai perangkat adalah…", opsi: [".DOCX", ".XLSX", ".PPTX", ".MP4", ".TXT"], kunci: 3 },
+    { q: "Penerapan: video edukasi berbantuan AI sudah jadi, tetapi ada gambar hasil AI yang tidak sesuai fakta ilmiah. Tindakan paling tepat adalah…", opsi: ["tetap dipakai karena dibuat AI", "menghapus seluruh bagian video ber-AI", "memeriksa ke sumber tepercaya, memperbaiki konten & visual, lalu baru mengunggah", "mengunggah secepat mungkin", "mengganti seluruh isi dengan musik"], kunci: 2 },
+    { q: "Penerapan: sebelum melakukan editing di CapCut, langkah awal yang paling tepat adalah…", opsi: ["menambahkan efek transisi sebanyak mungkin", "memilih musik yang sedang populer", "menentukan tujuan, materi, dan alur cerita video", "mengatur kecepatan semua klip jadi lambat", "menambahkan animasi pada setiap teks"], kunci: 2 },
+    { q: "Penerapan: penonton berkomentar suara narasi terlalu cepat, tulisan sulit dibaca, informasi kurang jelas. Perbaikan yang tepat adalah…", opsi: ["mengabaikan komentar karena penonton banyak", "menghapus video & berhenti berkarya", "menambah efek visual agar tidak bosan", "mengevaluasi kualitas audio, memperbaiki keterbacaan teks, menyederhanakan informasi, lalu menguji ulang", "mengganti seluruh isi dengan musik populer"], kunci: 3 },
+  ],
+},
 ];
 
 /* =====================================================================
- * KUIS AKHIR — 20 soal (4 dari tiap modul: 3 konsep + 1 penerapan),
- * durasi 20 menit.
+ * KUIS AKHIR — 24 soal (4 dari tiap modul: 3 konsep + 1 penerapan),
+ * durasi 24 menit.
  * ===================================================================== */
 const KUIS_AKHIR = {
   id: "p-final",
   judul: "Kuis Akhir — Produksi & Diseminasi Konten Digital",
   ikon: "🏁",
-  durasiMenit: 20,
+  durasiMenit: 24,
   soal: [
     { q: "Produksi — Urutan tahap produksi konten digital yang benar adalah…", opsi: ["Ide → Perencanaan → Produksi → Pasca Produksi → Diseminasi", "Produksi → Ide → Diseminasi → Perencanaan", "Ide → Produksi → Perencanaan → Diseminasi", "Diseminasi → Ide → Produksi → Pasca Produksi"], kunci: 0 },
     { q: "Produksi — Menentukan target audiens dilakukan pada tahap…", opsi: ["pasca produksi", "pengeditan", "perencanaan (pra-produksi)", "diseminasi"], kunci: 2 },
@@ -534,5 +636,9 @@ const KUIS_AKHIR = {
     { q: "Diseminasi — Lisensi <b>CC BY</b> berarti…", opsi: ["bebas tanpa aturan", "dilarang dipakai", "wajib mencantumkan atribusi pembuat", "wajib bayar setiap dilihat"], kunci: 2 },
     { q: "Diseminasi — Ukuran (rasio) video vertikal untuk platform konten pendek adalah…", opsi: ["9:16", "3:4", "16:9", "1:1"], kunci: 0 },
     { q: "Diseminasi — Penerapan: video vertikal tinggi 1280 px, rasio 9:16 → lebarnya…", opsi: ["640 px", "720 px", "800 px", "512 px"], kunci: 1 },
+    { q: "CapCut — Aplikasi CapCut adalah perangkat lunak yang digunakan untuk…", opsi: ["membuat dan menyunting video", "memproses angka dan tabel", "membuat sistem operasi komputer", "mengelola basis data"], kunci: 0 },
+    { q: "CapCut — Penggunaan <b>timeline</b> pada CapCut bertujuan untuk…", opsi: ["menentukan harga video", "mengatur urutan, durasi, dan posisi klip video serta audio", "menghapus aplikasi yang tidak dipakai", "mengubah video menjadi dokumen teks"], kunci: 1 },
+    { q: "CapCut — Penerapan: setelah editing selesai, format file video yang umum agar dapat ditonton di berbagai perangkat adalah…", opsi: [".DOCX", ".XLSX", ".PPTX", ".MP4"], kunci: 3 },
+    { q: "CapCut — Penerapan: kelompokmu berwaktu terbatas namun ingin video edukatif 3 menit yang menarik, informatif, dan mudah dipahami. Strategi paling efektif dengan CapCut dan AI adalah…", opsi: ["memakai seluruh efek & transisi agar terlihat canggih", "meminta AI membuat video sepenuhnya tanpa pemeriksaan", "menyusun naskah dengan bantuan AI, memverifikasi informasi, membuat visual pendukung, lalu mengedit dan menyelaraskan audio serta teks di CapCut", "memakai video milik orang lain tanpa mencantumkan sumber"], kunci: 2 },
   ],
 };

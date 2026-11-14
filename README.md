@@ -16,9 +16,10 @@ tanpa editor kode program.
 | 3 🤖 | Konten Edukatif dengan Fitur AI — prompt berstruktur, durasi & aset | alur kerja ber-AI |
 | 4 🎨 | Karya Kreatif & Inspiratif dengan AI — rasio 3:4, warna hex, tagline | mock poster (warna & tagline versimu) |
 | 5 🌍 | Etika, Lisensi & Diseminasi — izin & kredit, CC BY, jadwal posting | alur diseminasi |
+| 6 ✂️ | Editing Video Edukatif dengan CapCut — timeline, Auto Captions, TTS, prompt AI, ekspor MP4, verifikasi & evaluasi | alur editing CapCut |
 
-Kuis akhir: **20 soal acak (4 dari tiap modul: 3 konsep + 1 penerapan), 20 menit**
-(`p-final`), terbuka setelah kelima modul tuntas (gerbang berantai).
+Kuis akhir: **24 soal acak (4 dari tiap modul: 3 konsep + 1 penerapan), 24 menit**
+(`p-final`), terbuka setelah keenam modul tuntas (gerbang berantai).
 
 ## Setup database (guru) — proyek Supabase mandiri
 
@@ -39,7 +40,7 @@ Repo ini memakai **proyek Supabase sendiri** (terpisah dari LKPD lain). Skema DB
 ## Cara pakai siswa
 
 - Daftar/login **tanpa email**: NISN + Nama + Kelas + Kata Sandi (tab 🎓 Siswa).
-- Tiap modul: Materi → Langkah contoh → **Praktik isian** (👁️ Lihat Visual menampilkan alur/timeline/poster versi isianmu; 📤 Kirim dinilai otomatis 0–100) → **Kuis 6 soal**.
+- Tiap modul: Materi → Langkah contoh → **Praktik isian** (👁️ Lihat Visual menampilkan alur/timeline/poster versi isianmu; 📤 Kirim dinilai otomatis 0–100) → **Kuis pilihan ganda berwaktu**.
 - Gerbang berantai: Modul N terbuka setelah praktik+kuis Modul N−1 terkirim.
 
 ## Struktur
@@ -51,7 +52,7 @@ guru.html         dashboard guru (analitik, nilai, rincian, materi & kunci)
 css/style.css     tema gelap (sama dengan LKPD induk)
 js/supabase-config.js   URL & anon key (WAJIB diisi — proyek mandiri)
 js/auth.js        login/session + mapper NISN→email
-js/data.js        5 modul p1–p5 + KUIS_AKHIR (p-final)
+js/data.js        6 modul p1–p6 + KUIS_AKHIR (p-final)
 js/siswa.js       praktik isian + kanvas (alur/timeline/poster) + gerbang + kuis berwaktu
 js/guru.js        analitik, CSV, realtime, materi & kunci, kelola akun & reset sandi/tugas
 sql/schema.sql    skema Supabase (jalankan 1× di SQL Editor proyek)
