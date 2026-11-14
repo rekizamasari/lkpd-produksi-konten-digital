@@ -51,6 +51,24 @@ $g("filter-kelas").onchange = () => tampilkan(semuaData);
 $g("btn-csv").onclick = unduhCSV;
 
 /* ---------- TAB KELOLA: sandi & reset ---------- */
+console.info("guru.js versi 2026-11-14b — fitur Kelola aktif");
+
+/** Tampilkan pesan status di tab Kelola (inline, tidak bergantung pada alert). */
+function pesanKelola(teks, ok = true) {
+  const box = $g("kelola-pesan");
+  box.textContent = teks;
+  box.className = "pesan " + (ok ? "ok" : "err");
+  box.style.display = "block";
+}
+
+/** Jalankan promise dengan penjaga waktu supaya tidak menggantung selamanya. */
+function denganBatasWaktu(p, detik = 25) {
+  return Promise.race([
+    p,
+    new Promise((_, rej) => setTimeout(() => rej(new Error("Tidak ada jawaban dari server dalam " + detik + " detik — cek koneksi internet lalu coba lagi.")), detik * 1000)),
+  ]);
+}
+
 $g("reset-modul").innerHTML =
   `<option value="*">♻️ Semua modul (ulang dari awal)</option>` +
   MODUL.map(m => `<option value="${m.id}">M${m.nomor} — ${m.judul}</option>`).join("") +
@@ -58,48 +76,68 @@ $g("reset-modul").innerHTML =
 
 $g("btn-sandi-saya").onclick = async () => {
   const a = $g("sandi-baru-1").value.trim(), b = $g("sandi-baru-2").value.trim();
-  if (a.length < 6) return alert("Kata sandi minimal 6 karakter.");
-  if (a !== b) return alert("Kedua isian kata sandi tidak sama.");
+  if (a.length < 6) return pesanKelola("Kata sandi minimal 6 karakter.", false);
+  if (a !== b) return pesanKelola("Kedua isian kata sandi tidak sama.", false);
   const btn = $g("btn-sandi-saya"); btn.disabled = true;
-  const { error } = await sb.auth.updateUser({ password: a });
+  pesanKelola("⏳ Menyimpan kata sandi…");
+  try {
+    const { error } = await denganBatasWaktu(sb.auth.updateUser({ password: a }));
+    if (error) throw error;
+    $g("sandi-baru-1").value = $g("sandi-baru-2").value = "";
+    pesanKelola("✅ Kata sandi berhasil diganti. Gunakan sandi baru pada login berikutnya.", true);
+  } catch (e) {
+    console.error("Ganti sandi gagal:", e);
+    pesanKelola("❌ Gagal ganti sandi: " + e.message, false);
+  }
   btn.disabled = false;
-  if (error) return alert("Gagal ganti sandi: " + error.message);
-  $g("sandi-baru-1").value = $g("sandi-baru-2").value = "";
-  alert("✅ Kata sandi berhasil diganti.");
 };
 
 $g("btn-reset-sandi-siswa").onclick = async () => {
   const id = $g("reset-siswa-1").value, sandi = $g("sandi-siswa-baru").value.trim();
-  if (!id) return alert("Pilih siswa terlebih dahulu.");
-  if (sandi.length < 6) return alert("Kata sandi baru minimal 6 karakter.");
+  if (!id) return pesanKelola("Pilih siswa terlebih dahulu.", false);
+  if (sandi.length < 6) return pesanKelola("Kata sandi baru minimal 6 karakter.", false);
   if (!confirm(`Ganti kata sandi ${namaSiswa(id)} menjadi "${sandi}"?`)) return;
   const btn = $g("btn-reset-sandi-siswa"); btn.disabled = true;
-  const { error } = await sb.rpc("guru_reset_password_siswa", { p_siswa: id, p_sandi: sandi });
+  pesanKelola("⏳ Mereset sandi siswa…");
+  try {
+    const { error } = await denganBatasWaktu(
+      sb.rpc("guru_reset_password_siswa", { p_siswa: id, p_sandi: sandi })
+    );
+    if (error) throw error;
+    $g("sandi-siswa-baru").value = "";
+    pesanKelola(`✅ Kata sandi ${namaSiswa(id)} sudah diganti. Beritahu sandi barunya ke siswa.`, true);
+  } catch (e) {
+    console.error("Reset sandi siswa gagal:", e);
+    pesanKelola("❌ Gagal reset sandi: " + e.message, false);
+  }
   btn.disabled = false;
-  if (error) return alert("Gagal reset sandi: " + error.message);
-  $g("sandi-siswa-baru").value = "";
-  alert(`✅ Kata sandi ${namaSiswa(id)} sudah diganti. Beritahu sandi barunya ke siswa.`);
 };
 
 $g("btn-reset-tugas").onclick = async () => {
   const id = $g("reset-siswa-2").value, mid = $g("reset-modul").value;
-  if (!id) return alert("Pilih siswa terlebih dahulu.");
+  if (!id) return pesanKelola("Pilih siswa terlebih dahulu.", false);
   const cakupan = mid === "*" ? "SEMUA MODUL"
     : mid === FINAL_ID ? "Kuis Akhir"
     : "Modul " + (MODUL.find(m => m.id === mid)?.nomor ?? mid);
   if (!confirm(`⚠️ Reset tugas ${namaSiswa(id)} untuk ${cakupan}?\nSemua progres, nilai praktik, dan nilai kuis pada cakupan itu akan DIHAPUS dan tidak bisa dikembalikan.`)) return;
   const btn = $g("btn-reset-tugas"); btn.disabled = true; btn.textContent = "⏳ Menghapus…";
-  const gagal = [];
-  for (const t of ["progress", "submissions", "quiz_results"]) {
-    let q = sb.from(t).delete().eq("student_id", id);
-    if (mid !== "*") q = q.eq("module_id", mid);
-    const { error } = await q;
-    if (error) gagal.push(`${t}: ${error.message}`);
+  pesanKelola("⏳ Menghapus data tugas…");
+  try {
+    const gagal = [];
+    for (const t of ["progress", "submissions", "quiz_results"]) {
+      let q = sb.from(t).delete().eq("student_id", id);
+      if (mid !== "*") q = q.eq("module_id", mid);
+      const { error } = await denganBatasWaktu(q);
+      if (error) gagal.push(`${t}: ${error.message}`);
+    }
+    if (gagal.length) throw new Error(gagal.join(" | "));
+    pesanKelola(`✅ Tugas ${namaSiswa(id)} (${cakupan}) sudah direset.`, true);
+    await refreshSemua();
+  } catch (e) {
+    console.error("Reset tugas gagal:", e);
+    pesanKelola("❌ Gagal reset tugas: " + e.message, false);
   }
   btn.disabled = false; btn.textContent = "♻️ Reset Tugas Siswa";
-  if (gagal.length) return alert("Sebagian data gagal dihapus:\n" + gagal.join("\n"));
-  alert(`✅ Tugas ${namaSiswa(id)} (${cakupan}) sudah direset.`);
-  await refreshSemua();
 };
 
 /* ---------- TAB MATERI & KUNCI ---------- */
