@@ -28,7 +28,7 @@ Repo ini memakai **proyek Supabase sendiri** (terpisah dari LKPD lain). Skema DB
 1. **Buat proyek Supabase** baru di https://supabase.com (gratis). Salin **Project URL** dan **anon public key** dari *Settings → API*, lalu isi ke `js/supabase-config.js` (dua konstanta kosong di bagian atas).
 2. **Nonaktifkan konfirmasi email**: *Authentication → Sign In / Providers → Email* → matikan **"Confirm email"**. (Tanpa ini siswa tidak bisa login setelah daftar.)
 3. **Jalankan skema**: *SQL Editor → paste seluruh isi `sql/schema.sql` → Run*. Skrip ini idempotent (aman diulang).
-   Skema juga memuat fitur **Kelola** di dashboard guru: ganti sandi guru, reset sandi siswa (RPC `guru_reset_password_siswa`), dan reset tugas siswa (policy delete untuk guru). Jalankan ulang skrip ini jika proyek dibuat sebelum fitur tersebut ada.
+   Skema juga memuat fitur **Kelola** di dashboard guru: ganti sandi guru, reset sandi siswa (RPC `guru_reset_password_siswa`), reset tugas siswa (policy delete untuk guru), dan hapus akun siswa (RPC `guru_hapus_siswa`). Jalankan ulang skrip ini jika proyek dibuat sebelum fitur tersebut ada.
 4. **Kelola kelas**: edit bagian `SEED` di `sql/schema.sql` sebelum dijalankan (nama kelas X kamu), atau tambah/ubah lewat *Table Editor → kelas* kapan saja (tombol ➕ Tambah Kelas di dashboard guru juga bisa).
 5. **Akun guru** — daftarkan lewat Supabase Dashboard (*Authentication → Users → Add user*, Auto Confirm) dengan email + password guru, lalu di SQL Editor:
    ```sql

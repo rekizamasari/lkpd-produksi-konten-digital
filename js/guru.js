@@ -140,6 +140,29 @@ $g("btn-reset-tugas").onclick = async () => {
   btn.disabled = false; btn.textContent = "♻️ Reset Tugas Siswa";
 };
 
+$g("btn-hapus-siswa").onclick = async () => {
+  const id = $g("hapus-siswa").value;
+  if (!id) return pesanKelola("Pilih siswa terlebih dahulu.", false);
+  const nama = namaSiswa(id);
+  const ketik = prompt(`⚠️ Hapus PERMANEN akun ${nama} beserta profil, progres, dan seluruh nilainya?\n\nKetik nama siswa untuk konfirmasi:`);
+  if (ketik === null) return;
+  if (bersihNama(ketik).trim().toLowerCase() !== nama.toLowerCase())
+    return pesanKelola("Konfirmasi tidak cocok dengan nama siswa — penghapusan dibatalkan.", false);
+  const btn = $g("btn-hapus-siswa"); btn.disabled = true;
+  pesanKelola("⏳ Menghapus akun siswa…");
+  try {
+    const { error } = await denganBatasWaktu(sb.rpc("guru_hapus_siswa", { p_siswa: id }));
+    if (error) throw error;
+    $g("hapus-siswa").value = "";
+    pesanKelola(`✅ Akun ${nama} beserta seluruh datanya sudah dihapus permanen.`, true);
+    await refreshSemua();
+  } catch (e) {
+    console.error("Hapus siswa gagal:", e);
+    pesanKelola("❌ Gagal hapus akun: " + e.message, false);
+  }
+  btn.disabled = false;
+};
+
 /* ---------- TAB MATERI & KUNCI ---------- */
 $g("materi-pilih").innerHTML =
   MODUL.map(m => `<option value="${m.id}">Modul ${m.nomor} — ${m.judul}</option>`).join("") +
@@ -267,7 +290,7 @@ async function refreshSemua() {
 function isiDropdownSiswaKelola() {
   const opts = (semuaData?.listSiswa || []).map(s =>
     `<option value="${s.id}">${escapeHTML(bersihNama(s.nama))}${s.kelas?.nama ? " — " + escapeHTML(s.kelas.nama) : ""}</option>`).join("");
-  ["reset-siswa-1", "reset-siswa-2"].forEach(id => {
+  ["reset-siswa-1", "reset-siswa-2", "hapus-siswa"].forEach(id => {
     const el = $g(id), val = el.value;
     el.innerHTML = `<option value="">— pilih siswa —</option>` + opts;
     if (val) el.value = val; // pertahankan pilihan sebelumnya bila masih ada

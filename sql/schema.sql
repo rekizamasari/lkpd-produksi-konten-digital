@@ -226,3 +226,32 @@ drop policy if exists "quiz_del_guru" on public.quiz_results;
 create policy "quiz_del_guru" on public.quiz_results for delete using (
   exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'guru')
 );
+
+-- HAPUS AKUN SISWA via RPC (hanya guru; hanya akun siswa).
+-- Menghapus baris auth.users → profil, progres, praktik, dan nilai kuis
+-- ikut terhapus otomatis (foreign key ON DELETE CASCADE).
+create or replace function public.guru_hapus_siswa(p_siswa uuid)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare v_role text;
+begin
+  if not exists (select 1 from public.profiles where id = auth.uid() and role = 'guru') then
+    raise exception 'Hanya guru yang boleh menghapus akun siswa';
+  end if;
+  select role into v_role from public.profiles where id = p_siswa;
+  if v_role is null then
+    raise exception 'Siswa tidak ditemukan';
+  end if;
+  if v_role <> 'siswa' then
+    raise exception 'Akun guru tidak boleh dihapus lewat aplikasi';
+  end if;
+  delete from auth.users where id = p_siswa;
+  return 'OK';
+end;
+$$;
+
+revoke execute on function public.guru_hapus_siswa(uuid) from anon;
+grant  execute on function public.guru_hapus_siswa(uuid) to authenticated;
